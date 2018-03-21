@@ -1,5 +1,6 @@
 # Rock Paper Scissors
 Two player rock paper scissors game created to learn how to work with the firebase database.
+Site is public using github pages https://joshcoast.github.io/rock-paper-scissors/
 
 Using Tailwind framework. Docs can be found here: https://tailwindcss.com/docs/
 
