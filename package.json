@@ -1,0 +1,27 @@
+{
+  "name": "train-time",
+  "version": "1.0.0",
+  "description": "An activity to learn about writing to a database.",
+  "main": "tailwind.js",
+  "dependencies": {
+    "tailwindcss": "^0.5.1"
+  },
+  "devDependencies": {
+    "onchange": "^3.3.0"
+  },
+  "scripts": {
+		"tailwind": "./node_modules/.bin/tailwind build styles/main.css -c ./tailwind.js -o ./styles/output.css",
+		"watch": "onchange 'styles/main.css' -- ./node_modules/.bin/tailwind build styles/main.css -c ./tailwind.js -o ./styles/output.css",
+		"watchBetter": "onchange 'styles/main.css' -- npm run tailwind"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshcoast/train-time.git"
+  },
+  "author": "Josh Coast",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshcoast/train-time/issues"
+  },
+  "homepage": "https://github.com/joshcoast/train-time#readme"
+}
