@@ -4599,7 +4599,9 @@ button,
 	* @import "utilities/skew-transforms";
 	*/
 
-/* -- Button Components --*/
+/* -- Components --*/
+
+/*-----------------*/
 
 .btn-blue {
   background-color: #3490dc;
@@ -4609,9 +4611,7 @@ button,
   padding-bottom: .5rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  border-bottom-width: 4px;
   border-color: #2779bd;
-  border-radius: .25rem;
 }
 
 .btn-blue:hover {
@@ -4622,7 +4622,7 @@ button,
 /* -- Custom -- */
 
 .billboard {
-  height: 50vh;
+  height: 20vh;
 }
 
 @media (min-width: 576px) {

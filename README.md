@@ -15,7 +15,7 @@ Tailwind requires node v6
 Run `nvm use 6` to switch
 
 In order to build the css, you must process it with tailwind using this command:
-./node_modules/.bin/tailwind build styles/main.css -c ./tailwind.js -o ./styles/output.css
+`./node_modules/.bin/tailwind build styles/main.css -c ./tailwind.js -o ./styles/output.css`
 
 Use onchange and npm to run the tailwind process when ever the main.css file is changed:
 `npm run watch` 
