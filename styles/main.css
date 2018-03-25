@@ -66,17 +66,43 @@
 /*-----------------*/
 
 .btn-blue {
-	@apply .bg-blue .text-white .font-bold .py-2 .px-4 .border-blue-dark;
+	@apply .bg-blue .text-white .font-bold .py-2 .px-4;
 }
 
 .btn-blue:hover {
-	@apply .bg-blue-light .border-blue;
+	@apply .bg-blue-light;
+}
+
+.btn-teal {
+	@apply .bg-teal .text-white .font-bold .py-2 .px-4;
+}
+
+.btn-teal:hover {
+	@apply .bg-teal-light;
 }
 
 /* -- Custom -- */
 
 .billboard {
 	height: 20vh;
+}
+.disconnect-message-wrap {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(0,0,0,.5);
+}
+.disconnected-message {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 80%;
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%)
 }
 
 /*-- hide/show --*/

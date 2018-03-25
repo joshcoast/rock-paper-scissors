@@ -4611,18 +4611,50 @@ button,
   padding-bottom: .5rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  border-color: #2779bd;
 }
 
 .btn-blue:hover {
   background-color: #6cb2eb;
-  border-color: #3490dc;
+}
+
+.btn-teal {
+  background-color: #4dc0b5;
+  color: #fff;
+  font-weight: 700;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.btn-teal:hover {
+  background-color: #64d5ca;
 }
 
 /* -- Custom -- */
 
 .billboard {
   height: 20vh;
+}
+
+.disconnect-message-wrap {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, .5);
+}
+
+.disconnected-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+     -moz-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
 }
 
 /*-- hide/show --*/

@@ -272,11 +272,45 @@ $(document).ready(function () {
 		} else {
 			$("#whoWins header").text("It was a TIE dog!");
 		}
+
+		delayGameReset = setTimeout(function() {
+			resetGame();
+		}, 3000);
 	}
 
+	$("#getSomeData").on("click", function(){resetGame();});
+
 	function resetGame() {
-		
+		dbRefTurns.update({
+			turn: 1
+		});
+		$(".displayChoice").text("");
+		$("#whoWins header").text("");
+		if (thisPlayerOne == true && turn === 1) {
+			$(".playerOneScreen #playerOne").find(".choices").show();
+			$(".playerOneScreen #alertTwo").text("It's your turn!");
+		} else if (thisPlayerOne == false && turn === 1) {
+			$(".playerTwoScreen #alertTwo").text("Waiting for " + playerOneName + " to choose.");
+		}
 	}
+
+	// Rest game to fresh start when a player disconnects
+	dbRefTurns.onDisconnect().remove();
+	dbRefPlayers.onDisconnect().remove();
+	dbRefPlayers.on("child_removed", function (snap) {
+		
+		$("#alertTwo").text("");
+		$("#alertOne").text("");
+		$(".displayChoice").text("");
+	});
+
+	$("#okayBtn").on("click", function(){
+		$("#disconnectedMessage").hide();
+	});
+	$("#disconnectedMessage").on("click", function(){
+		$(this).hide();
+	});
+	
 
 
 
