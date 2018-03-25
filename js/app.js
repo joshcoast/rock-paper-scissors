@@ -56,7 +56,7 @@ $(document).ready(function () {
 			var playersChildren = snapshot.numChildren();
 			setPlayers(playersChildren, name);
 		});
-		$alertOne.find("form").hide();
+		$("#alertOne form").hide();
 	});
 
 
@@ -68,7 +68,7 @@ $(document).ready(function () {
 			// No players yet, setup Player One.
 			$('body').addClass("playerOneScreen");
 			writeUserData(1, name, 0, 0, "none");
-			$alertOne.text("Hi " + name + "! You are player 1.");
+			$("#joinMessage").show().text("Hi " + name + "! You are player 1.");
 			$alertTwo.text("Waiting for Player 2 to join...");
 			$playerOne.find("header").text(name);
 			$playerOne.find(".scoreBoard").show();
@@ -80,7 +80,7 @@ $(document).ready(function () {
 			// Player One is waiting, setup Player Two.
 			$('body').addClass("playerTwoScreen");
 			writeUserData(2, name, 0, 0, "none");
-			$alertOne.text("Hi " + name + "! You are player 2.");
+			$("#joinMessage").show().text("Hi " + name + "! You are player 2.");
 			$playerTwo.find("header").text(name);
 			$playerTwo.find(".scoreBoard").show();
 			$playerTwo.find(".winsRecord").text(wins);
@@ -298,10 +298,15 @@ $(document).ready(function () {
 	dbRefTurns.onDisconnect().remove();
 	dbRefPlayers.onDisconnect().remove();
 	dbRefPlayers.on("child_removed", function (snap) {
-		
+		$("#joinMessage").hide();
+		$("#alertOne form").show();
 		$("#alertTwo").text("");
-		$("#alertOne").text("");
+		$("#playerOne header").text("Waiting for Player 1");
+		$("#playerTwo header").text("Waiting for Player 2");
 		$(".displayChoice").text("");
+		$(".choices").hide();
+		$(".scoreBoard").hide();
+		$("#disconnectedMessage").show();
 	});
 
 	$("#okayBtn").on("click", function(){

@@ -106,6 +106,7 @@
 }
 
 /*-- hide/show --*/
+#disconnectedMessage,
 .choices, 
 .scoreBoard {
 	display: none;
