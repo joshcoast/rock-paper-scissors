@@ -7,6 +7,8 @@
 	<title>Rock Paper Scissors</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" media="screen" href="styles/output.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 	<script src="js/app.js"></script>
 </head>
 
@@ -15,35 +17,54 @@
 		<section class="billboard py-8 text-center bg-grey-dark text-white flex items-center">
 			<h1 class="w-full">Rock Paper Scissors</h1>
 		</section>
-		<section class="p-6 border-b border-grey-light mb-8 text-center">
-				<form>
-					<input placeholder="Your Name" class="p-2 border border-grey-light">
-					<button class="btn-blue"> Play!</button>
-				</form>			
-		</section>
-		<section id="homeTeam" class="player p-6 border-b border-grey-light">
-			<header>Mike</header>
-			<ul>
-				<li id="rock">Rock</li>
-				<li id="paper">Paper</li>
-				<li id="scissors">Scissors</li>
-			</ul>
-			<small class="scoreBoard">Wins:<span class="winsRecord">44</span> Losses:<span class="lossesRecord">55</span></small>
-		</section>
-
-		<section id="whoWins" class="p-6 border-b border-grey-light text-center">
-			<header>Jane Wins!</header>
-		</section>
-
-		<section id="awayTeam" class="player p-6 border-b border-grey-light">
-				<header>Jane</header>
-				<ul>
-					<li id="rock">Rock</li>
-					<li id="paper">Paper</li>
-					<li id="scissors">Scissors</li>
-				</ul>
-				<small class="scoreBoard">Wins:<span class="winsRecord">44</span> Losses:<span class="lossesRecord">55</span></small>
+		<div class="content p-6">
+			<section id="topDisplay" class="p-6 border-b border-grey-light mb-8 text-center">
+				<div id="alertOne">
+					<form>
+						<input id="nameInput" placeholder="Your Name" class="p-2 border border-grey-light">
+						<button id="addUser" class="btn-blue"> Play!</button>
+					</form>
+				</div>
+				<div id="alertTwo"></div>
 			</section>
+			<section id="playerOne" class="player p-6 border-b border-grey-light">
+				<header>Waiting for Player 1</header>
+				<div class="displayChoice text-5xl"></div>
+				<ul class="choices">
+					<li id="rock" data-choice="rock">Rock</li>
+					<li id="paper" data-choice="paper">Paper</li>
+					<li id="scissors" data-choice="scissors">Scissors</li>
+				</ul>
+				<small class="scoreBoard">Wins:
+					<span class="winsRecord">0</span> Losses:
+					<span class="lossesRecord">0</span>
+				</small>
+			</section>
+			<section id="whoWins" class="p-6 border-b border-grey-light text-center">
+				<header></header>
+			</section>
+			<section id="playerTwo" class="player p-6 border-b border-grey-light">
+				<header>Waiting for Player 2</header>
+				<div class="displayChoice text-5xl"></div>
+				<ul class="choices">
+					<li id="rock" data-choice="rock">Rock</li>
+					<li id="paper" data-choice="paper">Paper</li>
+					<li id="scissors" data-choice="scissors">Scissors</li>
+				</ul>
+				<small class="scoreBoard">Wins:
+					<span class="winsRecord">0</span> Losses:
+					<span class="lossesRecord">0</span>
+				</small>
+			</section>
+			<section id="chat">
+				<header class="mt-8">Chat</header>
+				<div id="messages" class="p-2 border border-grey-light w-full mb-2 h-32"> </div>
+				<form>
+					<input id="messageInput" placeholder="Say something to your opponent." class="p-2 border border-grey-light w-full mb-2">
+					<button id="sendMessage" class="btn-blue">Send</button>
+				</form>
+			</section>
+		</div>
 	</div>
 </body>
 

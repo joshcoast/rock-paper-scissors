@@ -79,6 +79,12 @@
 	height: 20vh;
 }
 
+/*-- hide/show --*/
+.choices, 
+.scoreBoard {
+	display: none;
+}
+
 
 
 

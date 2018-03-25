@@ -4625,6 +4625,13 @@ button,
   height: 20vh;
 }
 
+/*-- hide/show --*/
+
+.choices,
+.scoreBoard {
+  display: none;
+}
+
 @media (min-width: 576px) {
   .sm\:list-reset {
     list-style: none;
