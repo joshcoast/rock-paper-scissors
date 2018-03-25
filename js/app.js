@@ -43,6 +43,7 @@ $(document).ready(function () {
 	var playersChildren = 0;
 	var turn = 0;
 	var thisPlayerOne = false;
+	var whoWins;
 
 	/* -- Event listeners -- */
 
@@ -64,9 +65,9 @@ $(document).ready(function () {
 	// Set players
 	function setPlayers(numberOfPlayers, name) {
 		if (numberOfPlayers === 0) {
-			// No players yet, setup player one.
+			// No players yet, setup Player One.
 			$('body').addClass("playerOneScreen");
-			writeUserData(1, name, 0, 0);
+			writeUserData(1, name, 0, 0, "none");
 			$alertOne.text("Hi " + name + "! You are player 1.");
 			$alertTwo.text("Waiting for Player 2 to join...");
 			$playerOne.find("header").text(name);
@@ -74,10 +75,11 @@ $(document).ready(function () {
 			$playerOne.find(".winsRecord").text(wins);
 			$playerOne.find(".lossesRecord").text(losses);
 			thisPlayerOne = true;
+			watchPlayerOne();
 		} else if (numberOfPlayers === 1) {
-			// Player one is waiting, setup player two.
+			// Player One is waiting, setup Player Two.
 			$('body').addClass("playerTwoScreen");
-			writeUserData(2, name, 0, 0);
+			writeUserData(2, name, 0, 0, "none");
 			$alertOne.text("Hi " + name + "! You are player 2.");
 			$playerTwo.find("header").text(name);
 			$playerTwo.find(".scoreBoard").show();
@@ -87,16 +89,15 @@ $(document).ready(function () {
 				turn: 1
 			});
 			thisPlayerOne = false;
-			// Now that both players are in the database, we can watch for changes 
-			watchPlayers();
+			watchPlayerTwo();
 		} else {
 			console.log("game in progress");
-			$topDisplay.append("Sorry " + name + ", Try again later. A game is already in progress");
+			$topDisplay.append("Sorry " + name + ", Try again later. A game is already in progress :( ");
 		}
 	}
 
 	// Write player to database
-	function writeUserData(playerNumber, name, wins, losses) {
+	function writeUserData(playerNumber, name, wins, losses, choice) {
 		dbRefPlayers.child(playerNumber).set({
 			name: name,
 			wins: wins,
@@ -110,7 +111,7 @@ $(document).ready(function () {
 		name = snap.val().name;
 		wins = snap.val().wins;
 		losses = snap.val().losses;
-		console.log("name: " + name + ", key: " + snap.key);
+		//Build Player Screen
 		if (snap.key === "1") {
 			playerOneName = name;
 			$playerOne.find("header").text(name);
@@ -126,7 +127,7 @@ $(document).ready(function () {
 		}
 	});
 
-	function watchPlayers() {
+	function watchPlayerOne() {
 		// Watch DB for Player One updates
 		firebase.database().ref("players/1").on("value", function (snap) {
 			playerOneName = snap.val().name;
@@ -138,7 +139,9 @@ $(document).ready(function () {
 			console.log("PlayerOneLosses: " + playerOneLosses);
 			console.log("playerOneChoice: " + playerOneChoice);
 		});
+	}
 
+	function watchPlayerTwo() {
 		// Watch DB for Player Two updates
 		firebase.database().ref("players/2").on("value", function (snap) {
 			playerTwoName = snap.val().name;
@@ -152,23 +155,12 @@ $(document).ready(function () {
 		});
 	}
 
-	// Turn 1 - triggered when "turns" is added to database
-	dbRefTurns.on("child_added", function (snap) {
-		turn = snap.val();
-		console.log(turn + " is current turn on child_added");
-		if (thisPlayerOne == true && turn === 1) {
-			$(".playerOneScreen #playerOne").find(".choices").show();
-			$(".playerOneScreen #alertTwo").text("It's your turn!");
-		} else if (thisPlayerOne == false && turn === 1) {
-			$(".playerTwoScreen #alertTwo").text("Waiting for " + playerOneName + " to choose.");
-		}
-	});
-
 	//Player One makes a choice
 	$('#playerOne .choices').on("click", "li", function () {
 		playerOneChoice = $(this).attr("data-choice");
 		$("#playerOne .displayChoice").text(playerOneChoice);
-		console.log(playerOneChoice);
+		console.log("On click Player One Chose: " + playerOneChoice);
+		watchPlayerTwo();
 		dbRef.ref("players/1/").update({
 			choice: playerOneChoice
 		});
@@ -177,24 +169,12 @@ $(document).ready(function () {
 		});
 	});
 
-	// Turn 2 - Triggered when "turns/turn" is changed
-	dbRefTurns.on("child_changed", function (snap) {
-		turn = snap.val();
-		console.log(turn + " is current turn on child_changed");
-		if (thisPlayerOne == true && turn == 2) {
-			$(".playerOneScreen #playerOne").find(".choices").hide();
-			$(".playerOneScreen #alertTwo").text("Waiting for " + playerTwoName + " to choose.");
-		} else if (thisPlayerOne == false && turn === 2) {
-			$(".playerTwoScreen #playerTwo").find(".choices").show();
-			$(".playerTwoScreen #alertTwo").text("It's your turn!");
-		}
-	});
-
 	//Player Two Makes a Choice
 	$('#playerTwo .choices').on("click", "li", function () {
 		playerTwoChoice = $(this).attr("data-choice");
 		$("#playerTwo .displayChoice").text(playerTwoChoice);
-		console.log(playerTwoChoice);
+		console.log("On click Player Two Chose: " + playerTwoChoice);
+		watchPlayerOne();
 		dbRef.ref("players/2/").update({
 			choice: playerTwoChoice
 		});
@@ -202,15 +182,105 @@ $(document).ready(function () {
 			turn: 3
 		});
 		$('#playerTwo .choices').hide();
-		resultsScreen("Josh");
 	});
 
-	// Turn 3 - Results screen
-	function resultsScreen(theWinner) {
-		$("#playerOne .displayChoice").text(playerOneChoice);
-		$("#playerTwo .displayChoice").text(playerTwoChoice);
-		$("#whoWins header").text(theWinner + " for the win!");
+	// Turn 1 - triggered when "turns/turn" is added to database
+	dbRefTurns.on("child_added", function (snap) {
+		turn = snap.val();
+		if (thisPlayerOne == true && turn === 1) {
+			$(".playerOneScreen #playerOne").find(".choices").show();
+			$(".playerOneScreen #alertTwo").text("It's your turn!");
+		} else if (thisPlayerOne == false && turn === 1) {
+			$(".playerTwoScreen #alertTwo").text("Waiting for " + playerOneName + " to choose.");
+		}
+	});
+
+	// Turn 2 - Triggered when "turns/turn" is changed
+	dbRefTurns.on("child_changed", function (snap) {
+		turn = snap.val();
+		console.log(turn + " is current turn on dbRefTurns child_changed");
+		if (thisPlayerOne == true && turn == 2) {
+			$(".playerOneScreen #playerOne").find(".choices").hide();
+			$(".playerOneScreen #alertTwo").text("Waiting for " + playerTwoName + " to choose.");
+		} else if (thisPlayerOne == false && turn === 2) {
+			$(".playerTwoScreen #playerTwo").find(".choices").show();
+			$(".playerTwoScreen #alertTwo").text("It's your turn!");
+		}
+		if (turn == 3) {
+			console.log(playerTwoChoice + " please?");
+			gameLogic(playerOneChoice, playerTwoChoice);
+		}
+	});
+
+	function gameLogic(playerOneChoice, playerTwoChoice) {
+		if ((playerOneChoice === "rock") || (playerOneChoice === "paper") || (playerOneChoice === "scissors")) {
+
+			if ((playerOneChoice === "rock") && (playerTwoChoice === "scissors")) {
+				whoWins = "p1";
+				playerOneWins++;
+				playerTwoLosses++;
+			} else if ((playerOneChoice === "rock") && (playerTwoChoice === "paper")) {
+				whoWins = "p2";
+				playerOneLosses++;
+				playerTwoWins++;
+			} else if ((playerOneChoice === "scissors") && (playerTwoChoice === "rock")) {
+				whoWins = "p2";
+				playerOneLosses++;
+				playerTwoWins++;
+			} else if ((playerOneChoice === "scissors") && (playerTwoChoice === "paper")) {
+				whoWins = "p1";
+				playerOneWins++;
+				playerTwoLosses++;
+			} else if ((playerOneChoice === "paper") && (playerTwoChoice === "rock")) {
+				whoWins = "p1";
+				playerOneWins++;
+				playerTwoLosses++;
+			} else if ((playerOneChoice === "paper") && (playerTwoChoice === "scissors")) {
+				whoWins = "p2";
+				playerOneLosses++;
+				playerTwoWins++;
+			} else if (playerOneChoice === playerTwoChoice) {
+				whoWins = "tie";
+			}
+
+			console.log("winner: " + whoWins);
+			console.log("playerOneWins: " + playerOneWins);
+			console.log("playerOneLosses: " + playerOneLosses);
+			console.log("playerTwoWins: " + playerTwoWins);
+			console.log("playerTwoLosses: " + playerTwoLosses);
+
+			writeUserData(1, playerOneName, playerOneWins, playerOneLosses, playerOneChoice);
+			writeUserData(2, playerTwoName, playerTwoWins, playerTwoLosses, playerTwoChoice);
+			results();
+		}
 	}
+
+	function results(){
+		console.log("results fired");
+		$("#playerOne .displayChoice").text(playerOneChoice);
+		$("#playerOne .scoreBoard .winsRecord").text(playerOneWins);
+		$("#playerOne .scoreBoard .lossesRecord").text(playerOneLosses);
+
+		$("#playerTwo .displayChoice").text(playerTwoChoice);
+		$("#playerTwo .scoreBoard .winsRecord").text(playerTwoWins);
+		$("#playerTwo .scoreBoard .lossesRecord").text(playerTwoLosses);
+
+		if (whoWins === "p1") {
+			$("#whoWins header").text(playerOneName +  " for the win!");
+		} else if (whoWins === "p2") {
+			$("#whoWins header").text(playerTwoName +  " for the win!");
+		} else {
+			$("#whoWins header").text("It was a TIE dog!");
+		}
+	}
+
+	function resetGame() {
+		
+	}
+
+
+
+
 
 
 
