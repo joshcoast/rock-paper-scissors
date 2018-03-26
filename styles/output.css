@@ -4633,10 +4633,6 @@ button,
 
 /* -- Custom -- */
 
-.billboard {
-  height: 20vh;
-}
-
 .disconnect-message-wrap {
   position: fixed;
   top: 0;
@@ -4660,7 +4656,8 @@ button,
 /*-- hide/show --*/
 
 #disconnectedMessage,
-.choices,
+/*.choices,
+*/
 .scoreBoard {
   display: none;
 }
