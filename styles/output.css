@@ -4656,8 +4656,7 @@ button,
 /*-- hide/show --*/
 
 #disconnectedMessage,
-/*.choices,
-*/
+.choices,
 .scoreBoard {
   display: none;
 }
